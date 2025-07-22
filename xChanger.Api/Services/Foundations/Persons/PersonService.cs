@@ -27,7 +27,7 @@ namespace xChanger.Api.Services.Foundations.Persons
         {
             try
             {
-                ValidatePersonNotNull(person);
+                ValidatePersonOnAdd(person);
 
                 return await this.storageBroker.InsertPersonAsync(person);
             }
@@ -35,6 +35,15 @@ namespace xChanger.Api.Services.Foundations.Persons
             {
                 var personValidationException =
                     new PersonValidationException(nullPersonException);
+
+                this.loggingBroker.LogError(personValidationException);
+
+                throw personValidationException;
+            }
+            catch (InvalidPersonException invalidPersonException)
+            {
+                var personValidationException =
+                    new PersonValidationException(invalidPersonException);
 
                 this.loggingBroker.LogError(personValidationException);
 
