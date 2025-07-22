@@ -6,6 +6,7 @@
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Persons;
+using xChanger.Api.Models.Foundations.Persons.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Persons
 {
@@ -41,7 +42,23 @@ namespace xChanger.Api.Services.Foundations.Persons
             throw new NotImplementedException();
         }
 
-        public async ValueTask<Person> RetrievePersonByIdAsync(Guid personId) =>
-            await this.storageBroker.SelectPersonByIdAsync(personId);
+        public async ValueTask<Person> RetrievePersonByIdAsync(Guid personId)
+        {
+            try
+            {
+                ValidatePersonId(personId);
+
+                return await this.storageBroker.SelectPersonByIdAsync(personId);
+            }
+            catch (InvalidPersonException invalidPersonException)
+            {
+                var personValidationException =
+                    new PersonValidationException(invalidPersonException);
+
+                this.loggingBroker.LogError(personValidationException);
+
+                throw personValidationException;
+            }
+        }
     }
 }
