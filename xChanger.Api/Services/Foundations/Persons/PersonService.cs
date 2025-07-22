@@ -32,5 +32,16 @@ namespace xChanger.Api.Services.Foundations.Persons
 
         public IQueryable<Person> RetrieveAllPersons() =>
             TryCatch(() => this.storageBroker.SelectAllPersons());
+
+        public IQueryable<Person> RetrieveAllPeopleWithPets() =>
+            TryCatch(() => this.storageBroker.SelectAllPersonsWithPets());
+
+        public IQueryable<Person> RetrieveAllPersonWithPets()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask<Person> RetrievePersonByIdAsync(Guid personId) =>
+            throw new NotImplementedException();
     }
 }
