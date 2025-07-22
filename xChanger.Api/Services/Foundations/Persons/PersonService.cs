@@ -3,6 +3,7 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
@@ -61,6 +62,18 @@ namespace xChanger.Api.Services.Foundations.Persons
                 this.loggingBroker.LogCritical(personDependencyException);
 
                 throw personDependencyException;
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsPersonException =
+                    new AlreadyExistsPersonException(duplicateKeyException);
+
+                var personDependencyValidationException =
+                    new PersonDependencyValidationException(alreadyExistsPersonException);
+
+                this.loggingBroker.LogError(personDependencyValidationException);
+
+                throw personDependencyValidationException;
             }
         }
     }
