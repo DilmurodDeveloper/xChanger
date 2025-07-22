@@ -91,5 +91,43 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Person somePerson = CreateRandomPerson();
+            var serviceException = new Exception();
+
+            var failedPersonServiceException =
+                new FailedPersonServiceException(serviceException);
+
+            var expectedPersonServiceException =
+                new PersonServiceException(failedPersonServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertPersonAsync(somePerson))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<Person> addPersonTask =
+                this.personService.AddPersonAsync(somePerson);
+
+            // then
+            await Assert.ThrowsAsync<PersonServiceException>(() =>
+                addPersonTask.AsTask());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertPersonAsync(somePerson),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedPersonServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
