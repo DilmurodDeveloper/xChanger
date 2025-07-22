@@ -6,10 +6,11 @@
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Persons;
+using xChanger.Api.Models.Foundations.Persons.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Persons
 {
-    public class PersonService : IPersonService
+    public partial class PersonService : IPersonService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -22,7 +23,23 @@ namespace xChanger.Api.Services.Foundations.Persons
             this.loggingBroker = loggingBroker;
         }
 
-        public async ValueTask<Person> AddPersonAsync(Person person) =>
-            await this.storageBroker.InsertPersonAsync(person);
+        public async ValueTask<Person> AddPersonAsync(Person person)
+        {
+            try
+            {
+                ValidatePersonNotNull(person);
+
+                return await this.storageBroker.InsertPersonAsync(person);
+            }
+            catch (NullPersonException nullPersonException)
+            {
+                var personValidationException =
+                    new PersonValidationException(nullPersonException);
+
+                this.loggingBroker.LogError(personValidationException);
+
+                throw personValidationException;
+            }
+        }
     }
 }
