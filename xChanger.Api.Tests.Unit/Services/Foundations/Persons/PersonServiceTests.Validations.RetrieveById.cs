@@ -50,5 +50,47 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnRetrieveByIdIfPersonNotFoundAndLogItAsync()
+        {
+            // given
+            Guid somePersonId = Guid.NewGuid();
+            Person noPerson = null;
+
+            var notFoundPersonException =
+                new NotFoundPersonException(somePersonId);
+
+            var expectedPersonValidationException =
+                new PersonValidationException(notFoundPersonException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectPersonByIdAsync(It.IsAny<Guid>()))
+                    .ReturnsAsync(noPerson);
+
+            // when
+            ValueTask<Person> retriveByIdPersonTask =
+                this.personService.RetrievePersonByIdAsync(somePersonId);
+
+            var actualPersonValidationException =
+                await Assert.ThrowsAsync<PersonValidationException>(() =>
+                    retriveByIdPersonTask.AsTask());
+
+            // then
+            actualPersonValidationException.Should()
+                .BeEquivalentTo(expectedPersonValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectPersonByIdAsync(somePersonId),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedPersonValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
