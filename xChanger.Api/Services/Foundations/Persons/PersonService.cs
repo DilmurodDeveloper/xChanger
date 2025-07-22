@@ -29,5 +29,8 @@ namespace xChanger.Api.Services.Foundations.Persons
 
             return await this.storageBroker.InsertPersonAsync(person);
         });
+
+        public IQueryable<Person> RetrieveAllPersons() =>
+            throw new NotImplementedException();
     }
 }

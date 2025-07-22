@@ -10,5 +10,6 @@ namespace xChanger.Api.Services.Foundations.Persons
     public interface IPersonService
     {
         ValueTask<Person> AddPersonAsync(Person person);
+        IQueryable<Person> RetrieveAllPersons();
     }
 }
