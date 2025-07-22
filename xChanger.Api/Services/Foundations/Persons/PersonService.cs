@@ -50,6 +50,18 @@ namespace xChanger.Api.Services.Foundations.Persons
 
                 throw personDependencyException;
             }
+            catch (Exception exception)
+            {
+                var failedPersonServiceException =
+                    new FailedPersonServiceException(exception);
+
+                var personServiceException =
+                    new PersonServiceException(failedPersonServiceException);
+
+                this.loggingBroker.LogError(personServiceException);
+
+                throw personServiceException;
+            }
         }
     }
 }
