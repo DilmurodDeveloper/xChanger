@@ -22,7 +22,7 @@ namespace xChanger.Api.Services.Foundations.Persons
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<Person> AddPersonAsync(Person person) =>
-            throw new NotImplementedException();
+        public async ValueTask<Person> AddPersonAsync(Person person) =>
+            await this.storageBroker.InsertPersonAsync(person);
     }
 }
