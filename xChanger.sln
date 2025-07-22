@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xChanger.Api", "xChanger.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xChanger.Api.Tests.Unit", "xChanger.Api.Tests.Unit\xChanger.Api.Tests.Unit.csproj", "{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xChanger.Api.Infrastructure.Build", "xChanger.Api.Infrastructure.Build\xChanger.Api.Infrastructure.Build.csproj", "{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
