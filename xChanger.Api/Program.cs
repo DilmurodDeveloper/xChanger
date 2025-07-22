@@ -1,3 +1,8 @@
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Free to Use for Precise File Conversion
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();

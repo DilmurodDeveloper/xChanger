@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿//- - - - - - - - - - - - - - - - - - - - - - - - - -
+// Copyright (c) Coalition of Good-Hearted Engineers
+// Free to Use for Precise File Conversion
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+
+using Microsoft.AspNetCore.Mvc;
 using RESTFulSense.Controllers;
 
 namespace xChanger.Api.Controllers
