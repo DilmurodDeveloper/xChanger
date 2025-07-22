@@ -31,6 +31,14 @@ namespace xChanger.Api.Services.Foundations.Persons
             }
         }
 
+        private static void ValidateStoragePerson(Person maybePerson, Guid personId)
+        {
+            if (maybePerson is null)
+            {
+                throw new NotFoundPersonException(personId);
+            }
+        }
+
         private static dynamic IsInvalid(Guid id) => new
         {
             Condition = id == Guid.Empty,

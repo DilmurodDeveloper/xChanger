@@ -48,12 +48,26 @@ namespace xChanger.Api.Services.Foundations.Persons
             {
                 ValidatePersonId(personId);
 
-                return await this.storageBroker.SelectPersonByIdAsync(personId);
+                Person maybePerson =
+                    await this.storageBroker.SelectPersonByIdAsync(personId);
+
+                ValidateStoragePerson(maybePerson, personId);
+
+                return maybePerson;
             }
             catch (InvalidPersonException invalidPersonException)
             {
                 var personValidationException =
                     new PersonValidationException(invalidPersonException);
+
+                this.loggingBroker.LogError(personValidationException);
+
+                throw personValidationException;
+            }
+            catch (NotFoundPersonException notFoundPersonException)
+            {
+                var personValidationException =
+                    new PersonValidationException(notFoundPersonException);
 
                 this.loggingBroker.LogError(personValidationException);
 
