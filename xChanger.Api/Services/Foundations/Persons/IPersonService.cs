@@ -3,11 +3,12 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace xChanger.Api.Tests.Unit
+using xChanger.Api.Models.Foundations.Persons;
+
+namespace xChanger.Api.Services.Foundations.Persons
 {
-    public class DeleteMe
+    public interface IPersonService
     {
-        [Fact]
-        public void ShouldBeTrue() => Assert.True(true);
+        ValueTask<Person> AddPersonAsync(Person person);
     }
 }
