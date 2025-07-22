@@ -31,6 +31,6 @@ namespace xChanger.Api.Services.Foundations.Persons
         });
 
         public IQueryable<Person> RetrieveAllPersons() =>
-            throw new NotImplementedException();
+            this.storageBroker.SelectAllPersons();
     }
 }

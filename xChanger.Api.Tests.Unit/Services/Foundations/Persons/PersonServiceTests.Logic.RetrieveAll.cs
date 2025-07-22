@@ -4,6 +4,7 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
 using FluentAssertions;
+using Force.DeepCloner;
 using Moq;
 using xChanger.Api.Models.Foundations.Persons;
 
@@ -17,7 +18,7 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
             // given
             IQueryable<Person> randomPerson = CreateRandomPersons();
             IQueryable<Person> storagePerson = randomPerson;
-            IQueryable<Person> expectedPerson = storagePerson;
+            IQueryable<Person> expectedPerson = storagePerson.DeepClone();
 
             this.storageBrokerMock.Setup(broker =>
                 broker.SelectAllPersons())
