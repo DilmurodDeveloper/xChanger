@@ -3,12 +3,14 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
+using System.Linq.Expressions;
 using Moq;
 using Tynamix.ObjectFiller;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Persons;
 using xChanger.Api.Services.Foundations.Persons;
+using Xeptions;
 
 namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
 {
@@ -32,6 +34,9 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
 
         private static int GetRandomNumber() =>
            new IntRange(2, 10).GetValue();
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static Filler<Person> CreatePersonFiller()
         {
