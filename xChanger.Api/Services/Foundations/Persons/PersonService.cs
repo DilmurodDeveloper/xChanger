@@ -41,7 +41,7 @@ namespace xChanger.Api.Services.Foundations.Persons
             throw new NotImplementedException();
         }
 
-        public ValueTask<Person> RetrievePersonByIdAsync(Guid personId) =>
-            throw new NotImplementedException();
+        public async ValueTask<Person> RetrievePersonByIdAsync(Guid personId) =>
+            await this.storageBroker.SelectPersonByIdAsync(personId);
     }
 }
