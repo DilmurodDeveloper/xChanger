@@ -29,5 +29,29 @@ namespace xChanger.Api.Services.Foundations.Persons
 
             return await this.storageBroker.InsertPersonAsync(person);
         });
+
+        public IQueryable<Person> RetrieveAllPersons() =>
+            TryCatch(() => this.storageBroker.SelectAllPersons());
+
+        public IQueryable<Person> RetrieveAllPeopleWithPets() =>
+            TryCatch(() => this.storageBroker.SelectAllPersonsWithPets());
+
+        public IQueryable<Person> RetrieveAllPersonWithPets()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask<Person> RetrievePersonByIdAsync(Guid personId) =>
+        TryCatch(async () =>
+        {
+            ValidatePersonId(personId);
+
+            Person maybePerson =
+                await this.storageBroker.SelectPersonByIdAsync(personId);
+
+            ValidateStoragePerson(maybePerson, personId);
+
+            return maybePerson;
+        });
     }
 }

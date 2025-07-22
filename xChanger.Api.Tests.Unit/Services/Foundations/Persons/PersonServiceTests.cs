@@ -34,6 +34,12 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
         private static Person CreateRandomPerson() =>
             CreatePersonFiller().Create();
 
+        private IQueryable<Person> CreateRandomPersons()
+        {
+            return CreatePersonFiller()
+                .Create(count: GetRandomNumber()).AsQueryable();
+        }
+
         private static int GetRandomNumber() =>
            new IntRange(2, 10).GetValue();
 

@@ -14,6 +14,7 @@ namespace xChanger.Api.Services.Foundations.Persons
     public partial class PersonService
     {
         private delegate ValueTask<Person> ReturningPersonFunction();
+        private delegate IQueryable<Person> ReturningPersonsFunction();
 
         private async ValueTask<Person> TryCatch(ReturningPersonFunction returningPersonFunction)
         {
@@ -29,6 +30,10 @@ namespace xChanger.Api.Services.Foundations.Persons
             {
                 throw CreateAndLogValidationException(invalidPersonException);
             }
+            catch (NotFoundPersonException notFoundPersonException)
+            {
+                throw CreateAndLogValidationException(notFoundPersonException);
+            }
             catch (SqlException sqlException)
             {
                 var failedPersonStorageException = new FailedPersonStorageException(sqlException);
@@ -41,6 +46,28 @@ namespace xChanger.Api.Services.Foundations.Persons
                     new AlreadyExistsPersonException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsPersonException);
+            }
+            catch (Exception exception)
+            {
+                var failedPersonServiceException =
+                    new FailedPersonServiceException(exception);
+
+                throw CreateAndLogServiceException(failedPersonServiceException);
+            }
+        }
+
+        private IQueryable<Person> TryCatch(ReturningPersonsFunction returningPersonsFunction)
+        {
+            try
+            {
+                return returningPersonsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedPersonStorageException =
+                    new FailedPersonStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedPersonStorageException);
             }
             catch (Exception exception)
             {

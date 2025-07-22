@@ -20,11 +20,22 @@ namespace xChanger.Api.Services.Foundations.Persons
                 (Rule: IsInvalid(person.Age), Parameter: nameof(Person.Age)));
         }
 
+        private static void ValidatePersonId(Guid personId) =>
+            Validate((Rule: IsInvalid(personId), Parameter: nameof(Person.Id)));
+
         private static void ValidatePersonNotNull(Person person)
         {
             if (person is null)
             {
                 throw new NullPersonException();
+            }
+        }
+
+        private static void ValidateStoragePerson(Person maybePerson, Guid personId)
+        {
+            if (maybePerson is null)
+            {
+                throw new NotFoundPersonException(personId);
             }
         }
 
