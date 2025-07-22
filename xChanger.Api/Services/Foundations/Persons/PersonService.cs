@@ -3,9 +3,11 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
+using Microsoft.Data.SqlClient;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Persons;
+using xChanger.Api.Models.Foundations.Persons.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Persons
 {
@@ -30,7 +32,24 @@ namespace xChanger.Api.Services.Foundations.Persons
             return await this.storageBroker.InsertPersonAsync(person);
         });
 
-        public IQueryable<Person> RetrieveAllPersons() =>
-            this.storageBroker.SelectAllPersons();
+        public IQueryable<Person> RetrieveAllPersons()
+        {
+            try
+            {
+                return this.storageBroker.SelectAllPersons();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedPersonStorageException =
+                    new FailedPersonStorageException(sqlException);
+
+                var personDependencyException =
+                    new PersonDependencyException(failedPersonStorageException);
+
+                this.loggingBroker.LogCritical(personDependencyException);
+
+                throw personDependencyException;
+            }
+        }
     }
 }
