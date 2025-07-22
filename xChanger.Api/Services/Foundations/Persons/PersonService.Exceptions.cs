@@ -30,6 +30,10 @@ namespace xChanger.Api.Services.Foundations.Persons
             {
                 throw CreateAndLogValidationException(invalidPersonException);
             }
+            catch (NotFoundPersonException notFoundPersonException)
+            {
+                throw CreateAndLogValidationException(notFoundPersonException);
+            }
             catch (SqlException sqlException)
             {
                 var failedPersonStorageException = new FailedPersonStorageException(sqlException);
