@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36301.6 d17.14
+VisualStudioVersion = 17.14.36301.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xChanger.Api", "xChanger.Api\xChanger.Api.csproj", "{78C65767-4FA1-416B-BD55-A993637F3E3E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xChanger.Api.Tests.Unit", "xChanger.Api.Tests.Unit\xChanger.Api.Tests.Unit.csproj", "{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{78C65767-4FA1-416B-BD55-A993637F3E3E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78C65767-4FA1-416B-BD55-A993637F3E3E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78C65767-4FA1-416B-BD55-A993637F3E3E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF23F3A0-7881-4BCF-9535-EB2BB1F3A4DC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
