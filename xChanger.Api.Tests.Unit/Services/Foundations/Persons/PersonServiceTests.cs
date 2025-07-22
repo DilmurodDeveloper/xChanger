@@ -37,6 +37,9 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
         private static int GetRandomNumber() =>
            new IntRange(2, 10).GetValue();
 
+        private static string GetRandomString() =>
+            new MnemonicString().GetValue();
+
         private static SqlException GetSqlError() =>
             (SqlException)RuntimeHelpers.GetUninitializedObject(typeof(SqlException));
 
