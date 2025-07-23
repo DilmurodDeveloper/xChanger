@@ -3,12 +3,9 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Persons;
-using xChanger.Api.Models.Foundations.Persons.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Persons
 {
@@ -57,94 +54,17 @@ namespace xChanger.Api.Services.Foundations.Persons
             return maybePerson;
         });
 
-        public async ValueTask<Person> ModifyPersonAsync(Person person)
+        public ValueTask<Person> ModifyPersonAsync(Person person) =>
+        TryCatch(async () =>
         {
-            try
-            {
-                ValidatePersonOnModify(person);
+            ValidatePersonOnModify(person);
 
-                Person maybePerson =
-                await this.storageBroker.SelectPersonByIdAsync(person.Id);
+            Person maybePerson =
+            await this.storageBroker.SelectPersonByIdAsync(person.Id);
 
-                ValidateAgainstStoragePersonOnModify(person, maybePerson);
+            ValidateAgainstStoragePersonOnModify(person, maybePerson);
 
-                return await storageBroker.UpdatePersonAsync(person);
-            }
-            catch (NullPersonException nullPersonException)
-            {
-                var personValidationException =
-                    new PersonValidationException(nullPersonException);
-
-                this.loggingBroker.LogError(personValidationException);
-
-                throw personValidationException;
-            }
-            catch (InvalidPersonException invalidPersonException)
-            {
-                var personValidationException =
-                    new PersonValidationException(invalidPersonException);
-
-                this.loggingBroker.LogError(personValidationException);
-
-                throw personValidationException;
-            }
-            catch (NotFoundPersonException notFoundPersonException)
-            {
-                var personValidationException =
-                    new PersonValidationException(notFoundPersonException);
-
-                this.loggingBroker.LogError(personValidationException);
-
-                throw personValidationException;
-            }
-            catch (SqlException sqlException)
-            {
-                var failedPersonStorageException =
-                    new FailedPersonStorageException(sqlException);
-
-                var personDependencyException =
-                    new PersonDependencyException(failedPersonStorageException);
-
-                this.loggingBroker.LogCritical(personDependencyException);
-
-                throw personDependencyException;
-            }
-            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
-            {
-                var lockedPersonException =
-                    new LockedPersonException(dbUpdateConcurrencyException);
-
-                var personDependencyValidationException =
-                    new PersonDependencyValidationException(lockedPersonException);
-
-                this.loggingBroker.LogError(personDependencyValidationException);
-
-                throw personDependencyValidationException;
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                var failedPersonStorageException =
-                    new FailedPersonStorageException(dbUpdateException);
-
-                var personDependencyException =
-                    new PersonDependencyException(failedPersonStorageException);
-
-                this.loggingBroker.LogError(personDependencyException);
-
-                throw personDependencyException;
-            }
-            catch (Exception exception)
-            {
-                var failedPersonServiceException =
-                    new FailedPersonServiceException(exception);
-
-                var personServiceException =
-                    new PersonServiceException(failedPersonServiceException);
-
-                this.loggingBroker.LogError(personServiceException);
-
-                throw personServiceException;
-            }
-        }
+            return await storageBroker.UpdatePersonAsync(person);
+        });
     }
 }
