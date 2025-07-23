@@ -17,6 +17,7 @@ namespace xChanger.Api.Services.Foundations.Pets
             Validate(
                 (Rule: IsInvalid(pet.Id), Parameter: nameof(Pet.Id)),
                 (Rule: IsInvalid(pet.Name), Parameter: nameof(Pet.Name)),
+                (Rule: IsInvalid(pet.Type), Parameter: nameof(Pet.Type)),
                 (Rule: IsInvalid(pet.PersonId), Parameter: nameof(Pet.PersonId)));
         }
 
@@ -38,6 +39,12 @@ namespace xChanger.Api.Services.Foundations.Pets
         {
             Condition = string.IsNullOrWhiteSpace(text),
             Message = "Text is required"
+        };
+
+        private static dynamic IsInvalid(PetType type) => new
+        {
+            Condition = Enum.IsDefined(type) is false,
+            Message = "Value is invalid"
         };
 
         private static void Validate(params (dynamic Rule, string Parameter)[] validations)
