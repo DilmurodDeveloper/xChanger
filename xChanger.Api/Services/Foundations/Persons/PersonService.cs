@@ -59,7 +59,7 @@ namespace xChanger.Api.Services.Foundations.Persons
         {
             try
             {
-                ValidatePersonNotNull(person);
+                ValidatePersonOnModify(person);
 
                 Person maybePerson =
                 await this.storageBroker.SelectPersonByIdAsync(person.Id);
@@ -70,6 +70,15 @@ namespace xChanger.Api.Services.Foundations.Persons
             {
                 var personValidationException =
                     new PersonValidationException(nullPersonException);
+
+                this.loggingBroker.LogError(personValidationException);
+
+                throw personValidationException;
+            }
+            catch (InvalidPersonException invalidPersonException)
+            {
+                var personValidationException =
+                    new PersonValidationException(invalidPersonException);
 
                 this.loggingBroker.LogError(personValidationException);
 
