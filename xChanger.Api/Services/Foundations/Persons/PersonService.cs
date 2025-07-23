@@ -3,6 +3,7 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
+using Microsoft.Data.SqlClient;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Persons;
@@ -94,6 +95,18 @@ namespace xChanger.Api.Services.Foundations.Persons
                 this.loggingBroker.LogError(personValidationException);
 
                 throw personValidationException;
+            }
+            catch (SqlException sqlException)
+            {
+                var failedPersonStorageException =
+                    new FailedPersonStorageException(sqlException);
+
+                var personDependencyException =
+                    new PersonDependencyException(failedPersonStorageException);
+
+                this.loggingBroker.LogCritical(personDependencyException);
+
+                throw personDependencyException;
             }
         }
     }
