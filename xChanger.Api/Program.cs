@@ -20,6 +20,15 @@ using xChanger.Api.Services.Processings.Pets;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+            policy.WithOrigins("http://localhost:56820")
+                  .AllowAnyHeader()
+                  .AllowAnyMethod());
+});
+
 builder.Services.AddDbContext<StorageBroker>();
 AddBrokers(builder.Services);
 AddFoundationServices(builder.Services);
@@ -44,6 +53,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

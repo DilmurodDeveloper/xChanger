@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xChanger.Api.Tests.Unit", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "xChanger.Api.Infrastructure.Build", "xChanger.Api.Infrastructure.Build\xChanger.Api.Infrastructure.Build.csproj", "{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "xchanger.webdemo", "xChanger.WebDemo\xchanger.webdemo.esproj", "{8C9BD51C-C935-D0CE-E862-16005AA0ADA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,12 @@ Global
 		{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF51A0E7-6726-4C5E-81C8-4E0E43E82555}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C9BD51C-C935-D0CE-E862-16005AA0ADA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C9BD51C-C935-D0CE-E862-16005AA0ADA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C9BD51C-C935-D0CE-E862-16005AA0ADA6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{8C9BD51C-C935-D0CE-E862-16005AA0ADA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C9BD51C-C935-D0CE-E862-16005AA0ADA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C9BD51C-C935-D0CE-E862-16005AA0ADA6}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
