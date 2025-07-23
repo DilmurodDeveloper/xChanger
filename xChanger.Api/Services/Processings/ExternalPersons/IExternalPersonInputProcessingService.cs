@@ -5,7 +5,7 @@
 
 namespace xChanger.Api.Services.Processings.ExternalPersons
 {
-    public interface IExternalPersontInputProcessingService
+    public interface IExternalPersonInputProcessingService
     {
         ValueTask UploadExternalPersonFileAsync(IFormFile file);
     }
