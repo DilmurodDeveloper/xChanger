@@ -3,12 +3,9 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Pets;
-using xChanger.Api.Models.Foundations.Pets.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Pets
 {
@@ -49,94 +46,17 @@ namespace xChanger.Api.Services.Foundations.Pets
             return maybePet;
         });
 
-        public async ValueTask<Pet> ModifyPetAsync(Pet pet)
+        public ValueTask<Pet> ModifyPetAsync(Pet pet) =>
+        TryCatch(async () =>
         {
-            try
-            {
-                ValidatePetOnModify(pet);
+            ValidatePetOnModify(pet);
 
-                Pet maybePet =
-                    await this.storageBroker.SelectPetByIdAsync(pet.Id);
+            Pet maybePet =
+                await this.storageBroker.SelectPetByIdAsync(pet.Id);
 
-                ValidateAgainstStoragePetOnModify(pet, maybePet);
+            ValidateAgainstStoragePetOnModify(pet, maybePet);
 
-                return await storageBroker.UpdatePetAsync(pet);
-            }
-            catch (NullPetException nullPetException)
-            {
-                var petValidationException =
-                    new PetValidationException(nullPetException);
-
-                this.loggingBroker.LogError(petValidationException);
-
-                throw petValidationException;
-            }
-            catch (InvalidPetException invalidPetException)
-            {
-                var petValidationException =
-                    new PetValidationException(invalidPetException);
-
-                this.loggingBroker.LogError(petValidationException);
-
-                throw petValidationException;
-            }
-            catch (NotFoundPetException notFoundPetException)
-            {
-                var petValidationException =
-                    new PetValidationException(notFoundPetException);
-
-                this.loggingBroker.LogError(petValidationException);
-
-                throw petValidationException;
-            }
-            catch (SqlException sqlException)
-            {
-                var failedPetStorageException =
-                    new FailedPetStorageException(sqlException);
-
-                var petDependencyException =
-                    new PetDependencyException(failedPetStorageException);
-
-                this.loggingBroker.LogCritical(petDependencyException);
-
-                throw petDependencyException;
-            }
-            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
-            {
-                var lockedPetException =
-                    new LockedPetException(dbUpdateConcurrencyException);
-
-                var petDependencyValidationException =
-                    new PetDependencyValidationException(lockedPetException);
-
-                this.loggingBroker.LogError(petDependencyValidationException);
-
-                throw petDependencyValidationException;
-            }
-            catch (DbUpdateException dbUpdateException)
-            {
-                var failedPetStorageException =
-                    new FailedPetStorageException(dbUpdateException);
-
-                var petDependencyException =
-                    new PetDependencyException(failedPetStorageException);
-
-                this.loggingBroker.LogError(petDependencyException);
-
-                throw petDependencyException;
-            }
-            catch (Exception exception)
-            {
-                var failedPetServiceException =
-                    new FailedPetServiceException(exception);
-
-                var petServiceException =
-                    new PetServiceException(failedPetServiceException);
-
-                this.loggingBroker.LogError(petServiceException);
-
-                throw petServiceException;
-            }
-        }
+            return await storageBroker.UpdatePetAsync(pet);
+        });
     }
 }
