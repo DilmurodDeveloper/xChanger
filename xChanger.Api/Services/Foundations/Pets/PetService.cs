@@ -31,6 +31,6 @@ namespace xChanger.Api.Services.Foundations.Pets
         });
 
         public IQueryable<Pet> RetrieveAllPets() =>
-            throw new NotImplementedException();
+            this.storageBroker.SelectAllPets();
     }
 }
