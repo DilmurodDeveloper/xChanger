@@ -29,5 +29,8 @@ namespace xChanger.Api.Services.Foundations.Pets
 
             return await this.storageBroker.InsertPetAsync(pet);
         });
+
+        public IQueryable<Pet> RetrieveAllPets() =>
+            throw new NotImplementedException();
     }
 }

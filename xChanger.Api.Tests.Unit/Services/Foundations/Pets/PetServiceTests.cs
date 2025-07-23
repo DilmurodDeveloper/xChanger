@@ -34,6 +34,13 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Pets
         private static Pet CreateRandomPet() =>
             CreatePetFiller().Create();
 
+        private IQueryable<Pet> CreateRandomPets()
+        {
+            return CreatePetFiller()
+                .Create(count: GetRandomNumber())
+                .AsQueryable();
+        }
+
         private static int GetRandomNumber() =>
             new IntRange(5, 10).GetValue();
 
