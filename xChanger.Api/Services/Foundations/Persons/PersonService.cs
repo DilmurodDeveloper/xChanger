@@ -109,6 +109,18 @@ namespace xChanger.Api.Services.Foundations.Persons
 
                 throw personDependencyException;
             }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedPersonException =
+                    new LockedPersonException(dbUpdateConcurrencyException);
+
+                var personDependencyValidationException =
+                    new PersonDependencyValidationException(lockedPersonException);
+
+                this.loggingBroker.LogError(personDependencyValidationException);
+
+                throw personDependencyValidationException;
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedPersonStorageException =
