@@ -78,6 +78,18 @@ namespace xChanger.Api.Services.Foundations.Pets
 
                 throw petDependencyException;
             }
+            catch (Exception exception)
+            {
+                var failedPetServiceException =
+                    new FailedPetServiceException(exception);
+
+                var petServiceException =
+                    new PetServiceException(failedPetServiceException);
+
+                this.loggingBroker.LogError(petServiceException);
+
+                throw petServiceException;
+            }
         }
     }
 }
