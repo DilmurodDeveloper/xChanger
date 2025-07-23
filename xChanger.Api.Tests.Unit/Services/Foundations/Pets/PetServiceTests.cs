@@ -3,12 +3,14 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
+using System.Linq.Expressions;
 using Moq;
 using Tynamix.ObjectFiller;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Pets;
 using xChanger.Api.Services.Foundations.Pets;
+using Xeptions;
 
 namespace xChanger.Api.Tests.Unit.Services.Foundations.Pets
 {
@@ -29,6 +31,9 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Pets
 
         private static Pet CreateRandomPet() =>
             CreatePetFiller().Create();
+
+        private Expression<Func<Xeption, bool>> SameExceptionAs(Xeption expectedException) =>
+            actualException => actualException.SameExceptionAs(expectedException);
 
         private static Filler<Pet> CreatePetFiller()
         {
