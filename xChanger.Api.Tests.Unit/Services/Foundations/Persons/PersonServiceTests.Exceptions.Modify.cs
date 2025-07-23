@@ -157,5 +157,53 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnModifyIfDatabaseUpdateErrorOccursAndLogItAsync()
+        {
+            // given
+            Person randomPerson = CreateRandomPerson();
+            Person somePerson = randomPerson;
+            Guid personId = somePerson.Id;
+            var serviceException = new Exception();
+
+            var failedPersonServiceException =
+                new FailedPersonServiceException(serviceException);
+
+            var expectedPersonServiceException =
+                new PersonServiceException(failedPersonServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectPersonByIdAsync(personId))
+                    .Throws(serviceException);
+
+            // when
+            ValueTask<Person> modifyPersonTask =
+                this.personService.ModifyPersonAsync(somePerson);
+
+            PersonServiceException actualPersonServiceException =
+                await Assert.ThrowsAsync<PersonServiceException>(() =>
+                    modifyPersonTask.AsTask());
+
+            // then
+            actualPersonServiceException.Should()
+                .BeEquivalentTo(expectedPersonServiceException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedPersonServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectPersonByIdAsync(personId),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdatePersonAsync(somePerson),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
