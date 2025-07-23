@@ -33,7 +33,7 @@ namespace xChanger.Api.Services.Foundations.Pets
         public IQueryable<Pet> RetrieveAllPets() =>
             TryCatch(() => this.storageBroker.SelectAllPets());
 
-        public ValueTask<Pet> RetrievePetByIdAsync(Guid petId) =>
-            throw new NotImplementedException();
+        public async ValueTask<Pet> RetrievePetByIdAsync(Guid petId) =>
+            await this.storageBroker.SelectPetByIdAsync(petId);
     }
 }
