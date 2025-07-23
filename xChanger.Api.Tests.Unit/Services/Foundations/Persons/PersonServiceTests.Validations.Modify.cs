@@ -101,5 +101,52 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnModifyIfPersonDoesNotExistAndLogItAsync()
+        {
+            // given
+            Person randomPerson = CreateRandomPerson();
+            Person nonExistPerson = randomPerson;
+            Person nullPerson = null;
+
+            var notFoundPersonException =
+                new NotFoundPersonException(nonExistPerson.Id);
+
+            var expectedPersonValidationException =
+                new PersonValidationException(notFoundPersonException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectPersonByIdAsync(nonExistPerson.Id))
+                    .ReturnsAsync(nullPerson);
+
+            // when
+            ValueTask<Person> modifyPersonTask =
+                this.personService.ModifyPersonAsync(nonExistPerson);
+
+            PersonValidationException actualPersonValidationException =
+                await Assert.ThrowsAsync<PersonValidationException>(() =>
+                    modifyPersonTask.AsTask());
+
+            // then
+            actualPersonValidationException.Should()
+                .BeEquivalentTo(expectedPersonValidationException);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectPersonByIdAsync(nonExistPerson.Id),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedPersonValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdatePersonAsync(nonExistPerson),
+                    Times.Never);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
