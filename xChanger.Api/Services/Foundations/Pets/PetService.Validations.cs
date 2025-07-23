@@ -32,6 +32,17 @@ namespace xChanger.Api.Services.Foundations.Pets
                 (Rule: IsInvalid(pet.PersonId), Parameter: nameof(Pet.PersonId)));
         }
 
+        private static void ValidateAgainstStoragePetOnModify(Pet pet, Pet storagePet)
+        {
+            ValidateStoragePet(storagePet, pet.Id);
+
+            Validate(
+                (Rule: IsInvalid(pet.Id), Parameter: nameof(Pet.Id)),
+                (Rule: IsInvalid(pet.Name), Parameter: nameof(Pet.Name)),
+                (Rule: IsInvalid(pet.Type), Parameter: nameof(Pet.Type)),
+                (Rule: IsInvalid(pet.PersonId), Parameter: nameof(Pet.PersonId)));
+        }
+
         private static void ValidatePetId(Guid petId) =>
             Validate((Rule: IsInvalid(petId), Parameter: nameof(Pet.Id)));
 

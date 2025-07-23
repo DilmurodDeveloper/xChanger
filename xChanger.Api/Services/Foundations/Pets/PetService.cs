@@ -56,6 +56,8 @@ namespace xChanger.Api.Services.Foundations.Pets
                 Pet maybePet =
                     await this.storageBroker.SelectPetByIdAsync(pet.Id);
 
+                ValidateAgainstStoragePetOnModify(pet, maybePet);
+
                 return await storageBroker.UpdatePetAsync(pet);
             }
             catch (NullPetException nullPetException)
@@ -71,6 +73,15 @@ namespace xChanger.Api.Services.Foundations.Pets
             {
                 var petValidationException =
                     new PetValidationException(invalidPetException);
+
+                this.loggingBroker.LogError(petValidationException);
+
+                throw petValidationException;
+            }
+            catch (NotFoundPetException notFoundPetException)
+            {
+                var petValidationException =
+                    new PetValidationException(notFoundPetException);
 
                 this.loggingBroker.LogError(petValidationException);
 
