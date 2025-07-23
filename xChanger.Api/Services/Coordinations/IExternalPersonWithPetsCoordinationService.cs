@@ -5,11 +5,10 @@
 
 using xChanger.Api.Models.Orchestrations;
 
-namespace xChanger.Api.Services.Orchestrations.PersonPets
+namespace xChanger.Api.Services.Coordinations
 {
-    public interface IPersonPetOrchestrationService
+    public interface IExternalPersonWithPetsCoordinationService
     {
-        ValueTask<PersonPet> ProcessPersonWithPetsAsync(PersonPet personPet);
+        ValueTask<List<PersonPet>> CoordinateExternalPersonAsync();
     }
-
 }
