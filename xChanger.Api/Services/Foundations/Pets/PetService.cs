@@ -45,5 +45,8 @@ namespace xChanger.Api.Services.Foundations.Pets
 
             return maybePet;
         });
+
+        public ValueTask<Pet> ModifyPetAsync(Pet pet) =>
+            throw new NotImplementedException();
     }
 }
