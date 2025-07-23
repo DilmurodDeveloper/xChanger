@@ -14,8 +14,19 @@ namespace xChanger.Api.Brokers.Sheets
 
         public void Dispose() { }
 
-        private string GetSheetLocationWithName() =>
-            this.configuration.GetConnectionString("SheetConnection");
+        private string GetSheetLocationWithName()
+        {
+            string folderPath = Path.Combine(Directory.GetCurrentDirectory(), "UploadedFiles");
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            string fileName = this.configuration.GetConnectionString("SheetConnection");
+            return Path.Combine(folderPath, fileName);
+        }
+
 
         private FileInfo GetFileInfo() =>
             new FileInfo(fileName: GetSheetLocationWithName());

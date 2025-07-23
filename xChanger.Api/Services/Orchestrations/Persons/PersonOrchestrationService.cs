@@ -3,11 +3,7 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-using xChanger.Api.Models.Foundations.Persons;
-using xChanger.Api.Models.Foundations.Pets;
-using xChanger.Api.Models.Orchestrations;
 using xChanger.Api.Services.Processings.Persons;
-using xChanger.Api.Services.Processings.Pets;
 using Xeptions;
 
 namespace xChanger.Api.Services.Orchestrations.Persons
@@ -17,7 +13,7 @@ namespace xChanger.Api.Services.Orchestrations.Persons
         private readonly IPersonProcessingService personProcessingService;
         private readonly IPersonXMLProcessingService personXMLProcessingService;
 
-        private const string XmlFilePath = @"C:\Users\User\Desktop\MetaXPorter\MetaXPorter.Api\Resources\Export template.xml";
+        private const string XmlFilePath = @"C:\Users\Dilmurod Developer\Desktop\Projects\xChanger\Resources\Export template.xml";
 
         public PersonOrchestrationService(
             IPersonProcessingService personProcessingService,
@@ -31,11 +27,11 @@ namespace xChanger.Api.Services.Orchestrations.Persons
         {
             try
             {
-                var peopleWithPets =
+                var personWithPets =
                     this.personProcessingService.RetrieveAllPersonWithPets().ToList();
 
                 await this.personXMLProcessingService.ExportPersonPetsToXml(
-                    peopleWithPets, XmlFilePath);
+                    personWithPets, XmlFilePath);
             }
             catch (Exception exception)
             {

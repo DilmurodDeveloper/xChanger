@@ -28,11 +28,11 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
                 broker.SelectAllPersons()).Throws(sqlException);
 
             // when
-            Action retrieveAllPeopleAction = () =>
+            Action retrieveAllPersonAction = () =>
                 this.personService.RetrieveAllPersons();
 
             PersonDependencyException actualPersonDependencyException =
-                Assert.Throws<PersonDependencyException>(retrieveAllPeopleAction);
+                Assert.Throws<PersonDependencyException>(retrieveAllPersonAction);
 
             // then
             actualPersonDependencyException.Should()

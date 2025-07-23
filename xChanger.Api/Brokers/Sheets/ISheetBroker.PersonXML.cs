@@ -9,10 +9,10 @@ namespace xChanger.Api.Brokers.Sheets
 {
     public partial interface ISheetBroker
     {
-        ValueTask SavePeopleWithPetsToXmlFile(
-            IEnumerable<Person> peopleWithPets,
+        ValueTask SavePersonWithPetsToXmlFile(
+            IEnumerable<Person> personWithPets,
             string filePath);
 
-        ValueTask<MemoryStream> RetrievePeopleWithPetsXmlFile(string filePath);
+        ValueTask<MemoryStream> RetrievePersonWithPetsXmlFile(string filePath);
     }
 }

@@ -7,7 +7,7 @@ using xChanger.Api.Services.Foundations.ExternalPersons;
 
 namespace xChanger.Api.Services.Processings.ExternalPersons
 {
-    public class ExternalPersonInputProcessingService : IExternalPersontInputProcessingService
+    public class ExternalPersonInputProcessingService : IExternalPersonInputProcessingService
     {
         private readonly IExternalPersonInputService externalPersonInputService;
 
