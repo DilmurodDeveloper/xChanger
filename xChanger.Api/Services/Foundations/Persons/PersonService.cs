@@ -53,5 +53,8 @@ namespace xChanger.Api.Services.Foundations.Persons
 
             return maybePerson;
         });
+
+        public ValueTask<Person> ModifyPersonAsync(Person person) =>
+            throw new NotImplementedException();
     }
 }

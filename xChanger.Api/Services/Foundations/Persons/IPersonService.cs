@@ -13,5 +13,6 @@ namespace xChanger.Api.Services.Foundations.Persons
         IQueryable<Person> RetrieveAllPersons();
         IQueryable<Person> RetrieveAllPersonWithPets();
         ValueTask<Person> RetrievePersonByIdAsync(Guid personId);
+        ValueTask<Person> ModifyPersonAsync(Person person);
     }
 }
