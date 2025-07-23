@@ -22,7 +22,7 @@ namespace xChanger.Api.Services.Foundations.Pets
             this.loggingBroker = loggingBroker;
         }
 
-        public ValueTask<Pet> AddPetAsync(Pet pet) =>
-            throw new NotImplementedException();
+        public async ValueTask<Pet> AddPetAsync(Pet pet) =>
+            await this.storageBroker.InsertPetAsync(pet);
     }
 }
