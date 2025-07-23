@@ -11,5 +11,6 @@ namespace xChanger.Api.Services.Foundations.Pets
     {
         ValueTask<Pet> AddPetAsync(Pet pet);
         IQueryable<Pet> RetrieveAllPets();
+        ValueTask<Pet> RetrievePetByIdAsync(Guid petId);
     }
 }
