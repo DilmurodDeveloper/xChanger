@@ -109,5 +109,53 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Pets
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnModifyIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
+        {
+            // given
+            Pet randomPet = CreateRandomPet();
+            Pet somePet = randomPet;
+            Guid petId = somePet.Id;
+            var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
+
+            var lockedPetException =
+                new LockedPetException(dbUpdateConcurrencyException);
+
+            var expectedPetDependencyValidationException =
+                new PetDependencyValidationException(lockedPetException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectPetByIdAsync(petId))
+                    .Throws(dbUpdateConcurrencyException);
+
+            // when
+            ValueTask<Pet> modifyPetTask =
+                this.petService.ModifyPetAsync(somePet);
+
+            PetDependencyValidationException actualPetDependencyValidationException =
+                await Assert.ThrowsAsync<PetDependencyValidationException>(() =>
+                    modifyPetTask.AsTask());
+
+            // then
+            actualPetDependencyValidationException.Should()
+                .BeEquivalentTo(expectedPetDependencyValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedPetDependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectPetByIdAsync(petId),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdatePetAsync(somePet),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
