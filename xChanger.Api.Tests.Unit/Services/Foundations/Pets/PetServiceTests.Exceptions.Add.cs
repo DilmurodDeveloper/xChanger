@@ -57,9 +57,7 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Pets
             // given
             Pet somePet = CreateRandomPet();
             string someMessage = GetRandomString();
-
-            var duplicateKeyException =
-                new DuplicateKeyException(someMessage);
+            var duplicateKeyException = new DuplicateKeyException(someMessage);
 
             var alreadyExistsPetException =
                 new AlreadyExistsPetException(duplicateKeyException);

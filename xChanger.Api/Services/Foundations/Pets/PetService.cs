@@ -3,6 +3,7 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
+using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
@@ -61,6 +62,18 @@ namespace xChanger.Api.Services.Foundations.Pets
                 this.loggingBroker.LogCritical(petDependencyException);
 
                 throw petDependencyException;
+            }
+            catch (DuplicateKeyException duplicateKeyException)
+            {
+                var alreadyExistsPetException =
+                    new AlreadyExistsPetException(duplicateKeyException);
+
+                var petDependencyValidationException =
+                    new PetDependencyValidationException(alreadyExistsPetException);
+
+                this.loggingBroker.LogError(petDependencyValidationException);
+
+                throw petDependencyValidationException;
             }
         }
     }
