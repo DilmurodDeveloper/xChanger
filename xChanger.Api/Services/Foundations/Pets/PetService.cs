@@ -3,11 +3,9 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-using Microsoft.Data.SqlClient;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Pets;
-using xChanger.Api.Models.Foundations.Pets.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Pets
 {
@@ -35,61 +33,17 @@ namespace xChanger.Api.Services.Foundations.Pets
         public IQueryable<Pet> RetrieveAllPets() =>
             TryCatch(() => this.storageBroker.SelectAllPets());
 
-        public async ValueTask<Pet> RetrievePetByIdAsync(Guid petId)
+        public ValueTask<Pet> RetrievePetByIdAsync(Guid petId) =>
+        TryCatch(async () =>
         {
-            try
-            {
-                ValidatePetId(petId);
+            ValidatePetId(petId);
 
-                Pet maybePet =
-                    await this.storageBroker.SelectPetByIdAsync(petId);
+            Pet maybePet =
+                await this.storageBroker.SelectPetByIdAsync(petId);
 
-                ValidateStoragePet(maybePet, petId);
+            ValidateStoragePet(maybePet, petId);
 
-                return maybePet;
-            }
-            catch (InvalidPetException invalidPetException)
-            {
-                var petValidationException =
-                    new PetValidationException(invalidPetException);
-
-                this.loggingBroker.LogError(petValidationException);
-
-                throw petValidationException;
-            }
-            catch (NotFoundPetException notFoundPetException)
-            {
-                var petValidationException =
-                    new PetValidationException(notFoundPetException);
-
-                this.loggingBroker.LogError(petValidationException);
-
-                throw petValidationException;
-            }
-            catch (SqlException sqlException)
-            {
-                var failedPetStorageException =
-                    new FailedPetStorageException(sqlException);
-
-                var petDependencyException =
-                    new PetDependencyException(failedPetStorageException);
-
-                this.loggingBroker.LogCritical(petDependencyException);
-
-                throw petDependencyException;
-            }
-            catch (Exception exception)
-            {
-                var failedPetServiceException =
-                    new FailedPetServiceException(exception);
-
-                var petServiceException =
-                    new PetServiceException(failedPetServiceException);
-
-                this.loggingBroker.LogError(petServiceException);
-
-                throw petServiceException;
-            }
-        }
+            return maybePet;
+        });
     }
 }

@@ -30,6 +30,10 @@ namespace xChanger.Api.Services.Foundations.Pets
             {
                 throw CreateAndLogValidationException(invalidPetException);
             }
+            catch (NotFoundPetException notFoundPetException)
+            {
+                throw CreateAndLogValidationException(notFoundPetException);
+            }
             catch (SqlException sqlException)
             {
                 var failedPetStorageException =
