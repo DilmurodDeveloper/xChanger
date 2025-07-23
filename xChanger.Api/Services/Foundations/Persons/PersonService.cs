@@ -6,6 +6,7 @@
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Persons;
+using xChanger.Api.Models.Foundations.Persons.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Persons
 {
@@ -56,10 +57,24 @@ namespace xChanger.Api.Services.Foundations.Persons
 
         public async ValueTask<Person> ModifyPersonAsync(Person person)
         {
-            Person maybePerson =
+            try
+            {
+                ValidatePersonNotNull(person);
+
+                Person maybePerson =
                 await this.storageBroker.SelectPersonByIdAsync(person.Id);
 
-            return await storageBroker.UpdatePersonAsync(person);
+                return await storageBroker.UpdatePersonAsync(person);
+            }
+            catch (NullPersonException nullPersonException)
+            {
+                var personValidationException =
+                    new PersonValidationException(nullPersonException);
+
+                this.loggingBroker.LogError(personValidationException);
+
+                throw personValidationException;
+            }
         }
     }
 }
