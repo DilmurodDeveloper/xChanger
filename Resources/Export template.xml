@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<people>
+    <person name="Mary" age="32">
+        <pets>
+            <pet name="Markiza" type="Cat" />
+            <pet name="Pushistik" type="Cat" />
+            <pet name="Belka" type="Dog" />
+        </pets>
+    </person>
+    <person name="Gary" age="18">
+        <pets>
+            <pet name="Norm" type="Dog" />
+        </pets>
+    </person>
+    <person name="Mike" age="24">
+        <pets>
+            <pet name="Bert" type="Parrot" />
+            <pet name="Gosha" type="Parrot" />
+            <pet name="Milka" type="Cat" />
+        </pets>
+    </person>
+    <person name="Alex" age="25">
+        <pets>
+            <pet name="Casper" type="Cat" />
+            <pet name="Charli" type="Dog" />
+        </pets>
+    </person>
+</people>
