@@ -6,6 +6,7 @@
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Pets;
+using xChanger.Api.Models.Foundations.Pets.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Pets
 {
@@ -48,10 +49,24 @@ namespace xChanger.Api.Services.Foundations.Pets
 
         public async ValueTask<Pet> ModifyPetAsync(Pet pet)
         {
-            Pet maybePet =
-                await this.storageBroker.SelectPetByIdAsync(pet.Id);
+            try
+            {
+                ValidatePetNotNull(pet);
 
-            return await storageBroker.UpdatePetAsync(pet);
+                Pet maybePet =
+                    await this.storageBroker.SelectPetByIdAsync(pet.Id);
+
+                return await storageBroker.UpdatePetAsync(pet);
+            }
+            catch (NullPetException nullPetException)
+            {
+                var petValidationException =
+                    new PetValidationException(nullPetException);
+
+                this.loggingBroker.LogError(petValidationException);
+
+                throw petValidationException;
+            }
         }
     }
 }
