@@ -3,9 +3,11 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
+using Microsoft.SqlServer.Server;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Pets;
+using xChanger.Api.Models.Foundations.Pets.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Pets
 {
@@ -33,7 +35,23 @@ namespace xChanger.Api.Services.Foundations.Pets
         public IQueryable<Pet> RetrieveAllPets() =>
             TryCatch(() => this.storageBroker.SelectAllPets());
 
-        public async ValueTask<Pet> RetrievePetByIdAsync(Guid petId) =>
-            await this.storageBroker.SelectPetByIdAsync(petId);
+        public async ValueTask<Pet> RetrievePetByIdAsync(Guid petId)
+        {
+            try
+            {
+                ValidatePetId(petId);
+
+                return await this.storageBroker.SelectPetByIdAsync(petId);
+            }
+            catch (InvalidPetException invalidPetException)
+            {
+                var petValidationException =
+                    new PetValidationException(invalidPetException);
+
+                this.loggingBroker.LogError(petValidationException);
+
+                throw petValidationException;
+            }
+        }
     }
 }
