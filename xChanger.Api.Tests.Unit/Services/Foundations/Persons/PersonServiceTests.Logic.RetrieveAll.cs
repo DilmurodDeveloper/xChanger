@@ -13,7 +13,7 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
     public partial class PersonServiceTests
     {
         [Fact]
-        public void ShouldRetrieveAllPeople()
+        public void ShouldRetrieveAllPerson()
         {
             // given
             IQueryable<Person> randomPerson = CreateRandomPersons();

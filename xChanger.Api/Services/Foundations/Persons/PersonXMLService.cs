@@ -17,9 +17,9 @@ namespace xChanger.Api.Services.Foundations.Persons
 
         public async ValueTask ExportPersonPetsToXml(
             IEnumerable<Person> persons, string filePath) =>
-                await this.sheetBroker.SavePeopleWithPetsToXmlFile(persons, filePath);
+                await this.sheetBroker.SavePersonWithPetsToXmlFile(persons, filePath);
 
         public async ValueTask<Stream> RetrievePersonPetsXml(string filePath) =>
-            await this.sheetBroker.RetrievePeopleWithPetsXmlFile(filePath);
+            await this.sheetBroker.RetrievePersonWithPetsXmlFile(filePath);
     }
 }

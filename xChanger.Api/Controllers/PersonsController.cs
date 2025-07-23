@@ -30,18 +30,18 @@ namespace xChanger.Api.Controllers
         }
 
         [HttpPost("upload-and-store")]
-        public async ValueTask<ActionResult<List<PersonPet>>> UploadAndStorePeople(IFormFile file)
+        public async ValueTask<ActionResult<List<PersonPet>>> UploadAndStorePerson(IFormFile file)
         {
             await this.externalPersonInputProcessingService.UploadExternalPersonFileAsync(file);
 
-            List<PersonPet> storedPeople =
+            List<PersonPet> storedPerson =
                 await this.externalPersonWithPetsCoordinationService.CoordinateExternalPersonAsync();
 
-            return Ok(storedPeople);
+            return Ok(storedPerson);
         }
 
         [HttpGet("export/download")]
-        public async ValueTask<ActionResult> DownloadPeopleWithPetsXml()
+        public async ValueTask<ActionResult> DownloadPersonWithPetsXml()
         {
             try
             {
@@ -50,7 +50,7 @@ namespace xChanger.Api.Controllers
                 Stream xmlFileStream =
                     await this.personOrchestrationService.RetrievePersonWithPetsXmlFileAsync();
 
-                return File(xmlFileStream, "application/xml", "PeopleWithPets.xml");
+                return File(xmlFileStream, "application/xml", "PersonWithPets.xml");
             }
             catch (PersonDependencyException personDependencyException)
             {

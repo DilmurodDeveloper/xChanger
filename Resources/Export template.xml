@@ -1,28 +1,167 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<people>
-    <person name="Mary" age="32">
-        <pets>
-            <pet name="Markiza" type="Cat" />
-            <pet name="Pushistik" type="Cat" />
-            <pet name="Belka" type="Dog" />
-        </pets>
-    </person>
-    <person name="Gary" age="18">
-        <pets>
-            <pet name="Norm" type="Dog" />
-        </pets>
-    </person>
-    <person name="Mike" age="24">
-        <pets>
-            <pet name="Bert" type="Parrot" />
-            <pet name="Gosha" type="Parrot" />
-            <pet name="Milka" type="Cat" />
-        </pets>
-    </person>
-    <person name="Alex" age="25">
-        <pets>
-            <pet name="Casper" type="Cat" />
-            <pet name="Charli" type="Dog" />
-        </pets>
-    </person>
-</people>
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfPerson xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Person>
+    <Id>f2e84964-c5bc-4637-b819-212a307ad33a</Id>
+    <Name>Mary</Name>
+    <Age>32</Age>
+    <Pets>
+      <Pet>
+        <Id>601d3a39-db68-487c-8d5e-5b608fac6849</Id>
+        <Name>Pushistik</Name>
+        <Type>Cat</Type>
+        <PersonId>f2e84964-c5bc-4637-b819-212a307ad33a</PersonId>
+      </Pet>
+      <Pet>
+        <Id>09370b68-e63d-4b64-938d-ae7cf0caa13e</Id>
+        <Name>Markiza</Name>
+        <Type>Cat</Type>
+        <PersonId>f2e84964-c5bc-4637-b819-212a307ad33a</PersonId>
+      </Pet>
+      <Pet>
+        <Id>b2646460-feb3-4960-a8bb-e15b68348ffb</Id>
+        <Name>Belka</Name>
+        <Type>Dog</Type>
+        <PersonId>f2e84964-c5bc-4637-b819-212a307ad33a</PersonId>
+      </Pet>
+    </Pets>
+  </Person>
+  <Person>
+    <Id>a4c4c34e-1718-44e3-80df-2f02e205f1e6</Id>
+    <Name>Mary</Name>
+    <Age>32</Age>
+    <Pets>
+      <Pet>
+        <Id>7a28a977-ee8c-4b65-ab33-0a4ccec05eb8</Id>
+        <Name>Markiza</Name>
+        <Type>Cat</Type>
+        <PersonId>a4c4c34e-1718-44e3-80df-2f02e205f1e6</PersonId>
+      </Pet>
+      <Pet>
+        <Id>0f1bace7-0616-4486-a59a-98ded6a7c308</Id>
+        <Name>Belka</Name>
+        <Type>Dog</Type>
+        <PersonId>a4c4c34e-1718-44e3-80df-2f02e205f1e6</PersonId>
+      </Pet>
+      <Pet>
+        <Id>1c6051e3-22c8-493b-a3f8-afed132fe975</Id>
+        <Name>Pushistik</Name>
+        <Type>Cat</Type>
+        <PersonId>a4c4c34e-1718-44e3-80df-2f02e205f1e6</PersonId>
+      </Pet>
+    </Pets>
+  </Person>
+  <Person>
+    <Id>2c8ce6f3-ff9a-4abe-ab82-4ec26c3d05e9</Id>
+    <Name>Alex</Name>
+    <Age>25</Age>
+    <Pets>
+      <Pet>
+        <Id>c683f0e4-731b-4653-9164-567c4de27dae</Id>
+        <Name>Casper</Name>
+        <Type>Cat</Type>
+        <PersonId>2c8ce6f3-ff9a-4abe-ab82-4ec26c3d05e9</PersonId>
+      </Pet>
+      <Pet>
+        <Id>8ab97248-7514-49d1-a869-f72518c58b29</Id>
+        <Name>Charli</Name>
+        <Type>Dog</Type>
+        <PersonId>2c8ce6f3-ff9a-4abe-ab82-4ec26c3d05e9</PersonId>
+      </Pet>
+    </Pets>
+  </Person>
+  <Person>
+    <Id>ea99c9cc-5c83-44b1-ac9b-60eef3c96b4d</Id>
+    <Name>Mike</Name>
+    <Age>24</Age>
+    <Pets>
+      <Pet>
+        <Id>55b2c0a3-76da-4d2e-99b1-1b8328426fad</Id>
+        <Name>Milka</Name>
+        <Type>Cat</Type>
+        <PersonId>ea99c9cc-5c83-44b1-ac9b-60eef3c96b4d</PersonId>
+      </Pet>
+      <Pet>
+        <Id>7e5bd8a5-3d94-45fb-aa33-c0296ecb3920</Id>
+        <Name>Gosha</Name>
+        <Type>Parrot</Type>
+        <PersonId>ea99c9cc-5c83-44b1-ac9b-60eef3c96b4d</PersonId>
+      </Pet>
+      <Pet>
+        <Id>a67a1e86-deac-489d-9a0b-e287530f9e59</Id>
+        <Name>Bert</Name>
+        <Type>Parrot</Type>
+        <PersonId>ea99c9cc-5c83-44b1-ac9b-60eef3c96b4d</PersonId>
+      </Pet>
+    </Pets>
+  </Person>
+  <Person>
+    <Id>748e1051-b4ea-4f5d-ac99-915093cf1bac</Id>
+    <Name>Gary</Name>
+    <Age>18</Age>
+    <Pets>
+      <Pet>
+        <Id>f81f5335-2006-487f-b445-5b9f0c02bd73</Id>
+        <Name>Norm</Name>
+        <Type>Dog</Type>
+        <PersonId>748e1051-b4ea-4f5d-ac99-915093cf1bac</PersonId>
+      </Pet>
+    </Pets>
+  </Person>
+  <Person>
+    <Id>0807ce18-3cac-4f64-9f42-ac6cf9361ab6</Id>
+    <Name>Alex</Name>
+    <Age>25</Age>
+    <Pets>
+      <Pet>
+        <Id>6a5261f1-a476-45f7-b379-66788b130be5</Id>
+        <Name>Charli</Name>
+        <Type>Dog</Type>
+        <PersonId>0807ce18-3cac-4f64-9f42-ac6cf9361ab6</PersonId>
+      </Pet>
+      <Pet>
+        <Id>21bfdee3-bad3-489e-b14d-79f592dadc85</Id>
+        <Name>Casper</Name>
+        <Type>Cat</Type>
+        <PersonId>0807ce18-3cac-4f64-9f42-ac6cf9361ab6</PersonId>
+      </Pet>
+    </Pets>
+  </Person>
+  <Person>
+    <Id>161e9844-f647-48da-b144-cb9bb935fb66</Id>
+    <Name>Mike</Name>
+    <Age>24</Age>
+    <Pets>
+      <Pet>
+        <Id>01abf2c9-33ac-4374-a6aa-1a62d6df4f69</Id>
+        <Name>Bert</Name>
+        <Type>Parrot</Type>
+        <PersonId>161e9844-f647-48da-b144-cb9bb935fb66</PersonId>
+      </Pet>
+      <Pet>
+        <Id>674285de-fcf4-482f-9f84-ac3d7ba257a4</Id>
+        <Name>Gosha</Name>
+        <Type>Parrot</Type>
+        <PersonId>161e9844-f647-48da-b144-cb9bb935fb66</PersonId>
+      </Pet>
+      <Pet>
+        <Id>37147a9a-3b40-4114-aacb-cb669c391492</Id>
+        <Name>Milka</Name>
+        <Type>Cat</Type>
+        <PersonId>161e9844-f647-48da-b144-cb9bb935fb66</PersonId>
+      </Pet>
+    </Pets>
+  </Person>
+  <Person>
+    <Id>dd3c8807-8d2e-4561-bb89-ce832b5fa3fa</Id>
+    <Name>Gary</Name>
+    <Age>18</Age>
+    <Pets>
+      <Pet>
+        <Id>f61e6278-3223-4869-b9a7-46f1b61c7e93</Id>
+        <Name>Norm</Name>
+        <Type>Dog</Type>
+        <PersonId>dd3c8807-8d2e-4561-bb89-ce832b5fa3fa</PersonId>
+      </Pet>
+    </Pets>
+  </Person>
+</ArrayOfPerson>

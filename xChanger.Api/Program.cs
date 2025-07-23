@@ -21,11 +21,11 @@ using xChanger.Api.Services.Processings.Pets;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<StorageBroker>();
-AddBrokers(services);
-AddFoundationServices(services);
-AddProcessingServices(services);
-AddOrchestrationServices(services);
-AddCoordinationServices(services);
+AddBrokers(builder.Services);
+AddFoundationServices(builder.Services);
+AddProcessingServices(builder.Services);
+AddOrchestrationServices(builder.Services);
+AddCoordinationServices(builder.Services);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
