@@ -92,5 +92,42 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Pets
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowValidationExceptionOnAddIfTypeIsInvalidAndLogItAsync()
+        {
+            // given
+            Pet randomPet = CreateRandomPet();
+            Pet invalidPet = randomPet;
+            invalidPet.Type = GetInvalidEnum<PetType>();
+            var invalidPetException = new InvalidPetException();
+
+            invalidPetException.AddData(
+                key: nameof(Pet.Type),
+                values: "Value is invalid");
+
+            var expectedPetValidationException =
+                new PetValidationException(invalidPetException);
+
+            // when
+            ValueTask<Pet> addPetTask =
+                this.petService.AddPetAsync(invalidPet);
+
+            // then
+            await Assert.ThrowsAsync<PetValidationException>(() =>
+                addPetTask.AsTask());
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedPetValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertPetAsync(It.IsAny<Pet>()),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
