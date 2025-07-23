@@ -27,7 +27,7 @@ namespace xChanger.Api.Services.Foundations.Pets
         {
             try
             {
-                ValidatePetNotNull(pet);
+                ValidatePetOnAdd(pet);
 
                 return await this.storageBroker.InsertPetAsync(pet);
             }
@@ -35,6 +35,15 @@ namespace xChanger.Api.Services.Foundations.Pets
             {
                 var petValidationException =
                     new PetValidationException(nullPetException);
+
+                this.loggingBroker.LogError(petValidationException);
+
+                throw petValidationException;
+            }
+            catch (InvalidPetException invalidPetException)
+            {
+                var petValidationException =
+                    new PetValidationException(invalidPetException);
 
                 this.loggingBroker.LogError(petValidationException);
 
