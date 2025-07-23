@@ -109,5 +109,53 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Persons
             this.loggingBrokerMock.VerifyNoOtherCalls();
             this.storageBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowDependencyValidationExceptionOnModifyIfDatabaseUpdateConcurrencyErrorOccursAndLogItAsync()
+        {
+            // given
+            Person randomPerson = CreateRandomPerson();
+            Person somePerson = randomPerson;
+            Guid personId = somePerson.Id;
+            var dbUpdateConcurrencyException = new DbUpdateConcurrencyException();
+
+            var lockedPersonException =
+                new LockedPersonException(dbUpdateConcurrencyException);
+
+            var expectedPersonDependencyValidationException =
+                new PersonDependencyValidationException(lockedPersonException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.SelectPersonByIdAsync(personId))
+                    .Throws(dbUpdateConcurrencyException);
+
+            // when
+            ValueTask<Person> modifyPersonTask =
+                this.personService.ModifyPersonAsync(somePerson);
+
+            PersonDependencyValidationException actualPersonDependencyValidationException =
+                await Assert.ThrowsAsync<PersonDependencyValidationException>(() =>
+                    modifyPersonTask.AsTask());
+
+            // then
+            actualPersonDependencyValidationException.Should()
+                .BeEquivalentTo(expectedPersonDependencyValidationException);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedPersonDependencyValidationException))),
+                        Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.SelectPersonByIdAsync(personId),
+                    Times.Once);
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.UpdatePersonAsync(somePerson),
+                    Times.Never);
+
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+            this.storageBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
