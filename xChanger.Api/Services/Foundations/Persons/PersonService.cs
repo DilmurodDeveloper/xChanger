@@ -54,7 +54,12 @@ namespace xChanger.Api.Services.Foundations.Persons
             return maybePerson;
         });
 
-        public ValueTask<Person> ModifyPersonAsync(Person person) =>
-            throw new NotImplementedException();
+        public async ValueTask<Person> ModifyPersonAsync(Person person)
+        {
+            Person maybePerson =
+                await this.storageBroker.SelectPersonByIdAsync(person.Id);
+
+            return await storageBroker.UpdatePersonAsync(person);
+        }
     }
 }
