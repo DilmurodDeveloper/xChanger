@@ -4,6 +4,7 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Persons;
@@ -105,6 +106,18 @@ namespace xChanger.Api.Services.Foundations.Persons
                     new PersonDependencyException(failedPersonStorageException);
 
                 this.loggingBroker.LogCritical(personDependencyException);
+
+                throw personDependencyException;
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedPersonStorageException =
+                    new FailedPersonStorageException(dbUpdateException);
+
+                var personDependencyException =
+                    new PersonDependencyException(failedPersonStorageException);
+
+                this.loggingBroker.LogError(personDependencyException);
 
                 throw personDependencyException;
             }
