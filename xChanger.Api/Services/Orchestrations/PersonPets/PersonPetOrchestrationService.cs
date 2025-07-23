@@ -8,6 +8,9 @@ using xChanger.Api.Models.Foundations.Persons;
 using xChanger.Api.Models.Foundations.Pets;
 using xChanger.Api.Services.Foundations.Persons;
 using xChanger.Api.Services.Foundations.Pets;
+using xChanger.Api.Services.Processings.ExternalPersons;
+using xChanger.Api.Services.Processings.Persons;
+using xChanger.Api.Services.Processings.Pets;
 
 namespace xChanger.Api.Services.Orchestrations.PersonPets
 {
@@ -15,25 +18,39 @@ namespace xChanger.Api.Services.Orchestrations.PersonPets
     {
         private readonly IPersonService personService;
         private readonly IPetService petService;
+        private readonly IExternalPersonProcessingService externalPersonProcessingService;
+        private readonly IPersonProcessingService personProcessingService;
+        private readonly IPetProcessingService petProcessingService;
 
         public PersonPetOrchestrationService(
             IPersonService personService,
-            IPetService petService)
+            IPetService petService,
+            IExternalPersonProcessingService externalPersonProcessingService,
+            IPersonProcessingService personProcessingService,
+            IPetProcessingService petProcessingService)
         {
             this.personService = personService;
             this.petService = petService;
+            this.externalPersonProcessingService = externalPersonProcessingService;
+            this.personProcessingService = personProcessingService;
+            this.petProcessingService = petProcessingService;
         }
+
 
         public async ValueTask ProcessExternalPersonAsync(ExternalPerson externalPerson)
         {
-            Person person = MapToPerson(externalPerson);
-            Person addedPerson = await this.personService.AddPersonAsync(person);
+            ExternalPerson cleanedExternalPerson =
+                this.externalPersonProcessingService.ProcessExternalPerson(externalPerson);
 
-            IEnumerable<Pet> pets = MapToPets(externalPerson, addedPerson.Id);
+            Person person = MapToPerson(cleanedExternalPerson);
+            person = this.personProcessingService.ProcessPerson(person);
+            Person addedPerson = await this.personService.AddPersonAsync(person);
+            IEnumerable<Pet> pets = MapToPets(cleanedExternalPerson, addedPerson.Id);
 
             foreach (Pet pet in pets)
             {
-                await this.petService.AddPetAsync(pet);
+                Pet cleanedPet = this.petProcessingService.ProcessPet(pet);
+                await this.petService.AddPetAsync(cleanedPet);
             }
         }
 
