@@ -4,6 +4,7 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Pets;
@@ -97,6 +98,18 @@ namespace xChanger.Api.Services.Foundations.Pets
                     new PetDependencyException(failedPetStorageException);
 
                 this.loggingBroker.LogCritical(petDependencyException);
+
+                throw petDependencyException;
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedPetStorageException =
+                    new FailedPetStorageException(dbUpdateException);
+
+                var petDependencyException =
+                    new PetDependencyException(failedPetStorageException);
+
+                this.loggingBroker.LogError(petDependencyException);
 
                 throw petDependencyException;
             }
