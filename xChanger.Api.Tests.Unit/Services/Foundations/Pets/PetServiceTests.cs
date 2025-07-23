@@ -35,7 +35,7 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Pets
             CreatePetFiller().Create();
 
         private static int GetRandomNumber() =>
-            new IntRange(2, 9).GetValue();
+            new IntRange(5, 10).GetValue();
 
         private static string GetRandomString() =>
             new MnemonicString().GetValue();

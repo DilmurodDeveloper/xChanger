@@ -7,6 +7,7 @@ namespace xChanger.Api.Models.Foundations.Pets
 {
     public enum PetType
     {
+        Unknown = 0,
         Cat = 1,
         Dog = 2,
         Parrot = 3,
