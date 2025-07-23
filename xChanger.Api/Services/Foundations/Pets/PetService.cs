@@ -3,11 +3,9 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-using Microsoft.Data.SqlClient;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Pets;
-using xChanger.Api.Models.Foundations.Pets.Exceptions;
 
 namespace xChanger.Api.Services.Foundations.Pets
 {
@@ -32,36 +30,7 @@ namespace xChanger.Api.Services.Foundations.Pets
             return await this.storageBroker.InsertPetAsync(pet);
         });
 
-        public IQueryable<Pet> RetrieveAllPets()
-        {
-            try
-            {
-                return this.storageBroker.SelectAllPets();
-            }
-            catch (SqlException sqlException)
-            {
-                var failedPetStorageException =
-                    new FailedPetStorageException(sqlException);
-
-                var petDependencyException =
-                    new PetDependencyException(failedPetStorageException);
-
-                this.loggingBroker.LogCritical(petDependencyException);
-
-                throw petDependencyException;
-            }
-            catch (Exception exception)
-            {
-                var failedPetServiceException =
-                    new FailedPetServiceException(exception);
-
-                var petServiceException =
-                    new PetServiceException(failedPetServiceException);
-
-                this.loggingBroker.LogError(petServiceException);
-
-                throw petServiceException;
-            }
-        }
+        public IQueryable<Pet> RetrieveAllPets() =>
+            TryCatch(() => this.storageBroker.SelectAllPets());
     }
 }
