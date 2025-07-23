@@ -3,10 +3,11 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace xChanger.Api.Services.Orchestrations.ExternalPersons
+namespace xChanger.Api.Services.Orchestrations.Persons
 {
-    public interface IExternalPersonOrchestrationService
+    public interface IPersonOrchestrationService
     {
-        ValueTask RetrieveAndAddFormattedExternalPersonAsync();
+        ValueTask ExportAllPersonWithPetsToXmlAsync();
+        ValueTask<Stream> RetrievePersonWithPetsXmlFileAsync();
     }
 }

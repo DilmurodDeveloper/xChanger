@@ -4,19 +4,41 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
 using xChanger.Api.Models.Foundations.Persons;
+using xChanger.Api.Services.Foundations.Persons;
 
 namespace xChanger.Api.Services.Processings.Persons
 {
     public class PersonProcessingService : IPersonProcessingService
     {
-        public Person ProcessPerson(Person person)
+        private readonly IPersonService personService;
+
+        public PersonProcessingService(IPersonService personService) =>
+            this.personService = personService;
+
+        public async ValueTask<Person> UpsertPersonAsync(Person person)
         {
-            return new Person
+            Person maybePerson = RetrievePerson(person);
+
+            return maybePerson switch
             {
-                Id = person.Id,
-                Name = person.Name?.Trim(),
-                Age = person.Age
+                null => await this.personService.AddPersonAsync(person),
+                _ => await this.personService.ModifyPersonAsync(person)
             };
         }
+
+        private Person RetrievePerson(Person person)
+        {
+            IQueryable<Person> retrievedPersons =
+                this.personService.RetrieveAllPersons();
+
+            return retrievedPersons.FirstOrDefault(storagePerson =>
+                storagePerson.Id == person.Id);
+        }
+
+        public IQueryable<Person> RetrieveAllPerson() =>
+            personService.RetrieveAllPersons();
+
+        public IQueryable<Person> RetrieveAllPersonWithPets() =>
+            personService.RetrieveAllPersonWithPets();
     }
 }

@@ -3,10 +3,10 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace xChanger.Api.Services.Orchestrations.ExternalPersons
+namespace xChanger.Api.Services.Foundations.ExternalPersons
 {
-    public interface IExternalPersonOrchestrationService
+    public interface IExternalPersonInputService
     {
-        ValueTask RetrieveAndAddFormattedExternalPersonAsync();
+        ValueTask UploadExternalPersonFileAsync(IFormFile file);
     }
 }

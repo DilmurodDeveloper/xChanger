@@ -4,24 +4,45 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
 using xChanger.Api.Models.Foundations.ExternalPersons;
+using xChanger.Api.Services.Foundations.ExternalPersons;
 
 namespace xChanger.Api.Services.Processings.ExternalPersons
 {
     public class ExternalPersonProcessingService : IExternalPersonProcessingService
     {
-        public ExternalPerson ProcessExternalPerson(ExternalPerson externalPerson)
+        private readonly IExternalPersonService externalPersonService;
+
+        public ExternalPersonProcessingService(
+            IExternalPersonService externalPersonService) =>
+                this.externalPersonService = externalPersonService;
+
+        public async ValueTask<List<ExternalPerson>> RetrieveFormattedExternalPersonAsync()
         {
-            return new ExternalPerson
-            {
-                PersonName = externalPerson.PersonName,
-                Age = externalPerson.Age,
-                PetOne = externalPerson.PetOne?.Trim().Replace("-", string.Empty),
-                PetOneType = externalPerson.PetOneType?.Trim().Replace("-", string.Empty),
-                PetTwo = externalPerson.PetTwo?.Trim().Replace("-", string.Empty),
-                PetTwoType = externalPerson.PetTwoType?.Trim().Replace("-", string.Empty),
-                PetThree = externalPerson.PetThree?.Trim().Replace("-", string.Empty),
-                PetThreeType = externalPerson.PetThreeType?.Trim().Replace("-", string.Empty)
-            };
+            var retrievedExternalPersonPets =
+                await this.externalPersonService.RetrieveAllExternalPersonsAsync();
+
+            List<ExternalPerson> formattedExternalPersonPets =
+                FormatProperties(retrievedExternalPersonPets);
+
+            return formattedExternalPersonPets;
+        }
+
+        private List<ExternalPerson> FormatProperties(List<ExternalPerson> retrievedExternalPersonPets)
+        {
+            var formattedExternalPersonPets = retrievedExternalPersonPets.Select(retrievedPersonPet =>
+                new ExternalPerson()
+                {
+                    PersonName = retrievedPersonPet.PersonName,
+                    Age = retrievedPersonPet.Age,
+                    PetOne = retrievedPersonPet.PetOne.Trim().Replace("-", string.Empty),
+                    PetOneType = retrievedPersonPet.PetOneType.Trim().Replace("-", string.Empty),
+                    PetTwo = retrievedPersonPet.PetTwo.Trim().Replace("-", string.Empty),
+                    PetTwoType = retrievedPersonPet.PetTwoType.Trim().Replace("-", string.Empty),
+                    PetThree = retrievedPersonPet.PetThree.Trim().Replace("-", string.Empty),
+                    PetThreeType = retrievedPersonPet.PetThreeType.Trim().Replace("-", string.Empty),
+                });
+
+            return formattedExternalPersonPets.ToList();
         }
     }
 }

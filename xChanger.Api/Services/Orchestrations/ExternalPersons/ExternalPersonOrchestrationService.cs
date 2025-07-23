@@ -4,44 +4,32 @@
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
 using xChanger.Api.Models.Foundations.ExternalPersons;
-using xChanger.Api.Services.Foundations.ExternalPersons;
-using xChanger.Api.Services.Orchestrations.PersonPets;
 using xChanger.Api.Services.Processings.ExternalPersons;
 
 namespace xChanger.Api.Services.Orchestrations.ExternalPersons
 {
     public class ExternalPersonOrchestrationService : IExternalPersonOrchestrationService
     {
-        private readonly IExternalPersonService externalPersonService;
-        private readonly IPersonPetOrchestrationService personPetOrchestrationService;
         private readonly IExternalPersonProcessingService externalPersonProcessingService;
-
+        private readonly IExternalPersonEventProcessingService externalPersonEventProcessingService;
 
         public ExternalPersonOrchestrationService(
-            IExternalPersonService externalPersonService,
-            IPersonPetOrchestrationService personPetOrchestrationService,
-            IExternalPersonProcessingService externalPersonProcessingService)
+            IExternalPersonProcessingService externalPersonProcessingService,
+            IExternalPersonEventProcessingService externalPersonEventProcessingService)
         {
-            this.externalPersonService = externalPersonService;
-            this.personPetOrchestrationService = personPetOrchestrationService;
             this.externalPersonProcessingService = externalPersonProcessingService;
+            this.externalPersonEventProcessingService = externalPersonEventProcessingService;
         }
 
-        public async ValueTask ProcessAllExternalPersonsAsync()
+        public async ValueTask RetrieveAndAddFormattedExternalPersonAsync()
         {
-            List<ExternalPerson> externalPersons =
-                await this.externalPersonService.RetrieveAllExternalPersonsAsync();
+            List<ExternalPerson> formattedExternalPersonPets =
+                await this.externalPersonProcessingService
+                    .RetrieveFormattedExternalPersonAsync();
 
-            List<ExternalPerson> cleanedExternalPersons = externalPersons
-                .Select(ep => this.externalPersonProcessingService.ProcessExternalPerson(ep))
-                .ToList();
-
-            foreach (ExternalPerson externalPerson in cleanedExternalPersons)
-            {
-                await this.personPetOrchestrationService.ProcessExternalPersonAsync(externalPerson);
-            }
+            await this.externalPersonEventProcessingService
+                .AddExternalPerson(formattedExternalPersonPets);
         }
-
     }
 
 }

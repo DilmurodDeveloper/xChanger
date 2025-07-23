@@ -5,10 +5,11 @@
 
 using xChanger.Api.Models.Foundations.ExternalPersons;
 
-namespace xChanger.Api.Services.Processings.ExternalPersons
+namespace xChanger.Api.Services.Foundations.ExternalPersons
 {
-    public interface IExternalPersonProcessingService
+    public interface IExternalPersonEventService
     {
-        ValueTask<List<ExternalPerson>> RetrieveFormattedExternalPersonAsync();
+        ValueTask AddExternalPerson(List<ExternalPerson> externalPerson);
+        ValueTask<List<ExternalPerson>> RetrieveExternalPerson();
     }
 }

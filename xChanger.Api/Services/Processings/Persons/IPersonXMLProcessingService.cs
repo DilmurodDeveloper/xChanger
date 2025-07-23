@@ -7,10 +7,9 @@ using xChanger.Api.Models.Foundations.Persons;
 
 namespace xChanger.Api.Services.Processings.Persons
 {
-    public interface IPersonProcessingService
+    public interface IPersonXMLProcessingService
     {
-        ValueTask<Person> UpsertPersonAsync(Person person);
-        IQueryable<Person> RetrieveAllPerson();
-        IQueryable<Person> RetrieveAllPersonWithPets();
+        ValueTask ExportPersonPetsToXml(IEnumerable<Person> persons, string filePath);
+        ValueTask<Stream> RetrievePersonPetsXml(string filePath);
     }
 }

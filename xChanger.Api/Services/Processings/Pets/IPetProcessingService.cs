@@ -9,6 +9,7 @@ namespace xChanger.Api.Services.Processings.Pets
 {
     public interface IPetProcessingService
     {
-        Pet ProcessPet(Pet pet);
+        ValueTask<Pet> UpsertPetAsync(Pet pet);
+        IQueryable<Pet> RetrieveAllPets();
     }
 }
