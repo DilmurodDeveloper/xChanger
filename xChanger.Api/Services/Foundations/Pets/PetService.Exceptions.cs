@@ -5,6 +5,7 @@
 
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using xChanger.Api.Models.Foundations.Pets;
 using xChanger.Api.Models.Foundations.Pets.Exceptions;
 using Xeptions;
@@ -40,6 +41,18 @@ namespace xChanger.Api.Services.Foundations.Pets
                     new FailedPetStorageException(sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedPetStorageException);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedPetException = new LockedPetException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedPetException);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedPetStorageException = new FailedPetStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedPetStorageException);
             }
             catch (DuplicateKeyException duplicateKeyException)
             {
@@ -114,6 +127,14 @@ namespace xChanger.Api.Services.Foundations.Pets
             this.loggingBroker.LogError(petServiceException);
 
             return petServiceException;
+        }
+
+        private PetDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var petDependencyException = new PetDependencyException(exception);
+            this.loggingBroker.LogError(petDependencyException);
+
+            return petDependencyException;
         }
     }
 }
