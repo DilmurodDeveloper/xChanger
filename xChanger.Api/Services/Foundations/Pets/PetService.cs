@@ -29,5 +29,21 @@ namespace xChanger.Api.Services.Foundations.Pets
 
             return await this.storageBroker.InsertPetAsync(pet);
         });
+
+        public IQueryable<Pet> RetrieveAllPets() =>
+            TryCatch(() => this.storageBroker.SelectAllPets());
+
+        public ValueTask<Pet> RetrievePetByIdAsync(Guid petId) =>
+        TryCatch(async () =>
+        {
+            ValidatePetId(petId);
+
+            Pet maybePet =
+                await this.storageBroker.SelectPetByIdAsync(petId);
+
+            ValidateStoragePet(maybePet, petId);
+
+            return maybePet;
+        });
     }
 }

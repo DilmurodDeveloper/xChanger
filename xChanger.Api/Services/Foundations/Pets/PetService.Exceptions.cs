@@ -14,6 +14,7 @@ namespace xChanger.Api.Services.Foundations.Pets
     public partial class PetService
     {
         private delegate ValueTask<Pet> ReturningPetFunction();
+        private delegate IQueryable<Pet> ReturningPetsFunction();
 
         private async ValueTask<Pet> TryCatch(ReturningPetFunction returningPetFunction)
         {
@@ -29,9 +30,14 @@ namespace xChanger.Api.Services.Foundations.Pets
             {
                 throw CreateAndLogValidationException(invalidPetException);
             }
+            catch (NotFoundPetException notFoundPetException)
+            {
+                throw CreateAndLogValidationException(notFoundPetException);
+            }
             catch (SqlException sqlException)
             {
-                var failedPetStorageException = new FailedPetStorageException(sqlException);
+                var failedPetStorageException =
+                    new FailedPetStorageException(sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedPetStorageException);
             }
@@ -41,6 +47,28 @@ namespace xChanger.Api.Services.Foundations.Pets
                     new AlreadyExistsPetException(duplicateKeyException);
 
                 throw CreateAndLogDependencyValidationException(alreadyExistsPetException);
+            }
+            catch (Exception exception)
+            {
+                var failedPetServiceException =
+                    new FailedPetServiceException(exception);
+
+                throw CreateAndLogServiceException(failedPetServiceException);
+            }
+        }
+
+        private IQueryable<Pet> TryCatch(ReturningPetsFunction returningPetsFunction)
+        {
+            try
+            {
+                return returningPetsFunction();
+            }
+            catch (SqlException sqlException)
+            {
+                var failedPetStorageException =
+                    new FailedPetStorageException(sqlException);
+
+                throw CreateAndLogCriticalDependencyException(failedPetStorageException);
             }
             catch (Exception exception)
             {
