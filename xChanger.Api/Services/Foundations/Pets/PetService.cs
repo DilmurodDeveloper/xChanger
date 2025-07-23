@@ -46,7 +46,12 @@ namespace xChanger.Api.Services.Foundations.Pets
             return maybePet;
         });
 
-        public ValueTask<Pet> ModifyPetAsync(Pet pet) =>
-            throw new NotImplementedException();
+        public async ValueTask<Pet> ModifyPetAsync(Pet pet)
+        {
+            Pet maybePet =
+                await this.storageBroker.SelectPetByIdAsync(pet.Id);
+
+            return await storageBroker.UpdatePetAsync(pet);
+        }
     }
 }
