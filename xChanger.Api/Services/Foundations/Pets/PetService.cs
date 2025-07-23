@@ -101,6 +101,18 @@ namespace xChanger.Api.Services.Foundations.Pets
 
                 throw petDependencyException;
             }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedPetException =
+                    new LockedPetException(dbUpdateConcurrencyException);
+
+                var petDependencyValidationException =
+                    new PetDependencyValidationException(lockedPetException);
+
+                this.loggingBroker.LogError(petDependencyValidationException);
+
+                throw petDependencyValidationException;
+            }
             catch (DbUpdateException dbUpdateException)
             {
                 var failedPetStorageException =
