@@ -24,6 +24,14 @@ namespace xChanger.Api.Services.Foundations.Pets
         private static void ValidatePetId(Guid petId) =>
             Validate((Rule: IsInvalid(petId), Parameter: nameof(Pet.Id)));
 
+        private static void ValidateStoragePet(Pet maybePet, Guid petId)
+        {
+            if (maybePet is null)
+            {
+                throw new NotFoundPetException(petId);
+            }
+        }
+
         private static void ValidatePetNotNull(Pet pet)
         {
             if (pet is null)

@@ -3,7 +3,6 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-using Microsoft.SqlServer.Server;
 using xChanger.Api.Brokers.Loggings;
 using xChanger.Api.Brokers.Storages;
 using xChanger.Api.Models.Foundations.Pets;
@@ -41,12 +40,26 @@ namespace xChanger.Api.Services.Foundations.Pets
             {
                 ValidatePetId(petId);
 
-                return await this.storageBroker.SelectPetByIdAsync(petId);
+                Pet maybePet =
+                    await this.storageBroker.SelectPetByIdAsync(petId);
+
+                ValidateStoragePet(maybePet, petId);
+
+                return maybePet;
             }
             catch (InvalidPetException invalidPetException)
             {
                 var petValidationException =
                     new PetValidationException(invalidPetException);
+
+                this.loggingBroker.LogError(petValidationException);
+
+                throw petValidationException;
+            }
+            catch (NotFoundPetException notFoundPetException)
+            {
+                var petValidationException =
+                    new PetValidationException(notFoundPetException);
 
                 this.loggingBroker.LogError(petValidationException);
 
