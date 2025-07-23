@@ -3,14 +3,12 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace xChanger.Api.Models.Foundations.Pets
+using xChanger.Api.Models.Foundations.Pets;
+
+namespace xChanger.Api.Services.Foundations.Pets
 {
-    public enum PetType
+    public interface IPetService
     {
-        Unknown = 0,
-        Cat = 1,
-        Dog = 2,
-        Parrot = 3,
-        Other = 4
+        ValueTask<Pet> AddPetAsync(Pet pet);
     }
 }

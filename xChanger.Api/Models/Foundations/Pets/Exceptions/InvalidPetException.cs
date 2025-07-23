@@ -3,14 +3,14 @@
 // Free to Use for Precise File Conversion
 //- - - - - - - - - - - - - - - - - - - - - - - - - -
 
-namespace xChanger.Api.Models.Foundations.Pets
+using Xeptions;
+
+namespace xChanger.Api.Models.Foundations.Pets.Exceptions
 {
-    public enum PetType
+    public class InvalidPetException : Xeption
     {
-        Unknown = 0,
-        Cat = 1,
-        Dog = 2,
-        Parrot = 3,
-        Other = 4
+        public InvalidPetException()
+            : base(message: "Pet is invalid.")
+        { }
     }
 }
