@@ -89,5 +89,43 @@ namespace xChanger.Api.Tests.Unit.Services.Foundations.Pets
             this.storageBrokerMock.VerifyNoOtherCalls();
             this.loggingBrokerMock.VerifyNoOtherCalls();
         }
+
+        [Fact]
+        public async Task ShouldThrowServiceExceptionOnAddIfServiceErrorOccursAndLogItAsync()
+        {
+            // given
+            Pet somePet = CreateRandomPet();
+            var serviceException = new Exception();
+
+            var failedPetServiceException =
+                new FailedPetServiceException(serviceException);
+
+            var expectedPetServiceException =
+                new PetServiceException(failedPetServiceException);
+
+            this.storageBrokerMock.Setup(broker =>
+                broker.InsertPetAsync(somePet))
+                    .ThrowsAsync(serviceException);
+
+            // when
+            ValueTask<Pet> addPetTask =
+                this.petService.AddPetAsync(somePet);
+
+            // then
+            await Assert.ThrowsAsync<PetServiceException>(() =>
+                addPetTask.AsTask());
+
+            this.storageBrokerMock.Verify(broker =>
+                broker.InsertPetAsync(somePet),
+                    Times.Once);
+
+            this.loggingBrokerMock.Verify(broker =>
+                broker.LogError(It.Is(SameExceptionAs(
+                    expectedPetServiceException))),
+                        Times.Once);
+
+            this.storageBrokerMock.VerifyNoOtherCalls();
+            this.loggingBrokerMock.VerifyNoOtherCalls();
+        }
     }
 }
