@@ -64,6 +64,8 @@ namespace xChanger.Api.Services.Foundations.Persons
                 Person maybePerson =
                 await this.storageBroker.SelectPersonByIdAsync(person.Id);
 
+                ValidateAgainstStoragePersonOnModify(person, maybePerson);
+
                 return await storageBroker.UpdatePersonAsync(person);
             }
             catch (NullPersonException nullPersonException)
@@ -79,6 +81,15 @@ namespace xChanger.Api.Services.Foundations.Persons
             {
                 var personValidationException =
                     new PersonValidationException(invalidPersonException);
+
+                this.loggingBroker.LogError(personValidationException);
+
+                throw personValidationException;
+            }
+            catch (NotFoundPersonException notFoundPersonException)
+            {
+                var personValidationException =
+                    new PersonValidationException(notFoundPersonException);
 
                 this.loggingBroker.LogError(personValidationException);
 

@@ -30,6 +30,16 @@ namespace xChanger.Api.Services.Foundations.Persons
                 (Rule: IsInvalid(person.Age), Parameter: nameof(Person.Age)));
         }
 
+        private static void ValidateAgainstStoragePersonOnModify(Person person, Person storagePerson)
+        {
+            ValidateStoragePerson(storagePerson, person.Id);
+
+            Validate(
+                (Rule: IsInvalid(person.Id), Parameter: nameof(Person.Id)),
+                (Rule: IsInvalid(person.Name), Parameter: nameof(Person.Name)),
+                (Rule: IsInvalid(person.Age), Parameter: nameof(Person.Age)));
+        }
+
         private static void ValidatePersonId(Guid personId) =>
             Validate((Rule: IsInvalid(personId), Parameter: nameof(Person.Id)));
 
