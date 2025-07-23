@@ -53,5 +53,18 @@ namespace xChanger.Api.Services.Foundations.Persons
 
             return maybePerson;
         });
+
+        public ValueTask<Person> ModifyPersonAsync(Person person) =>
+        TryCatch(async () =>
+        {
+            ValidatePersonOnModify(person);
+
+            Person maybePerson =
+            await this.storageBroker.SelectPersonByIdAsync(person.Id);
+
+            ValidateAgainstStoragePersonOnModify(person, maybePerson);
+
+            return await storageBroker.UpdatePersonAsync(person);
+        });
     }
 }

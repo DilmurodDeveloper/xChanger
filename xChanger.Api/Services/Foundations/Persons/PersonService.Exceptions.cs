@@ -5,6 +5,7 @@
 
 using EFxceptions.Models.Exceptions;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using xChanger.Api.Models.Foundations.Persons;
 using xChanger.Api.Models.Foundations.Persons.Exceptions;
 using Xeptions;
@@ -36,9 +37,24 @@ namespace xChanger.Api.Services.Foundations.Persons
             }
             catch (SqlException sqlException)
             {
-                var failedPersonStorageException = new FailedPersonStorageException(sqlException);
+                var failedPersonStorageException =
+                    new FailedPersonStorageException(sqlException);
 
                 throw CreateAndLogCriticalDependencyException(failedPersonStorageException);
+            }
+            catch (DbUpdateConcurrencyException dbUpdateConcurrencyException)
+            {
+                var lockedPersonException =
+                    new LockedPersonException(dbUpdateConcurrencyException);
+
+                throw CreateAndLogDependencyValidationException(lockedPersonException);
+            }
+            catch (DbUpdateException dbUpdateException)
+            {
+                var failedPersonStorageException =
+                    new FailedPersonStorageException(dbUpdateException);
+
+                throw CreateAndLogDependencyException(failedPersonStorageException);
             }
             catch (DuplicateKeyException duplicateKeyException)
             {
@@ -113,6 +129,14 @@ namespace xChanger.Api.Services.Foundations.Persons
             this.loggingBroker.LogError(personServiceException);
 
             return personServiceException;
+        }
+
+        private PersonDependencyException CreateAndLogDependencyException(Xeption exception)
+        {
+            var personDependencyException = new PersonDependencyException(exception);
+            this.loggingBroker.LogError(personDependencyException);
+
+            return personDependencyException;
         }
     }
 }
